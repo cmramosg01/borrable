@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <meta name="author" content="Andrea Carvajal González" />
+  <meta name="description" content="App de Peluquería. Proyecto CITE-STEAM IA, FP y robótica inclusiva. Coord: Cristina Ramos y Sofía Merino" />
+
+  <title>Peluquería Andrea Carvajal</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#B08D82" />
+
+  <!-- Mejor URL normal, sin formato Markdown -->
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/c4js0cKY/Peluqueria-Andrea-Carvajal.png" />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #B08D82;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    iframe {
+      border: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+
+    #install-prompt {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #F8F1ED;
+      color: #4D4D4D;
+      box-shadow: 0 -4px 25px rgba(0,0,0,0.2);
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      padding: 30px 20px 25px 20px;
+      box-sizing: border-box;
+      transform: translateY(110%);
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    #install-prompt.show { transform: translateY(0); }
+
+    .install-icon {
+      width: 75px;
+      height: 75px;
+      border-radius: 18px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      object-fit: cover;
+      border: 2px solid white;
+    }
+    .install-title {
+      font-weight: bold;
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+      color: #B08D82;
+    }
+    .install-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 15px;
+      padding: 0 10px;
+    }
+    .install-safe {
+      font-size: 0.85rem;
+      color: #666;
+      background: rgba(176, 141, 130, 0.15);
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+      line-height: 1.3;
+    }
+    .install-btn {
+      background-color: #B08D82;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 320px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(176, 141, 130, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- WebApp de Apps Script (URL limpia) -->
+  <iframe
+    src="https://script.google.com/macros/s/AKfycbwYBmJpAY-d2UFM-sDHjAIOTS94U7bgLC3tSb5KTi_MBznKneadXehnEFYcVmtS0oJlqg/exec"
+    allow="camera; microphone; geolocation"
+  ></iframe>
+
+  <div id="install-prompt">
+    <img src="https://i.postimg.cc/c4js0cKY/Peluqueria-Andrea-Carvajal.png" alt="Icono App" class="install-icon" />
+    <div class="install-title">Lleva el salón en tu bolsillo</div>
+    <div class="install-text">
+      Para una experiencia rápida, pulsa en las opciones de tu navegador (⋮ o compartir) y selecciona
+      <strong>"Añadir a la pantalla de inicio"</strong>.
+    </div>
+    <div class="install-safe">
+      <span style="font-size: 1.5rem;">🔒</span>
+      <span>Es un acceso directo 100% seguro. No requiere instalación real, no ocupa memoria ni recopila tus datos personales.</span>
+    </div>
+    <button class="install-btn" onclick="closePrompt()">Entendido, cerrar aviso</button>
+  </div>
+
+  <script>
+    // SW (no cachea, pero deja listo el “envoltorio” como PWA)
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(err => console.log("Error SW", err));
+      });
+    }
+
+    function closePrompt() {
+      document.getElementById("install-prompt").classList.remove("show");
+    }
+
+    window.addEventListener("load", () => {
+      const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+      if (!isStandalone) {
+        setTimeout(() => document.getElementById("install-prompt").classList.add("show"), 2000);
+      }
+    });
+  </script>
+</body>
+</html>
